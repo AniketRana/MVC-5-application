@@ -68,5 +68,11 @@ namespace MVC_AppWithDB.Controllers
             }
             return View();
         }
+
+        public ActionResult Delete(int id) 
+        {
+            repository.DeleteEmp(id);
+            return RedirectToAction("GetAll");
+        }
     }
 }

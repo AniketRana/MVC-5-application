@@ -94,17 +94,42 @@ namespace MyApp.Db.DbOperation
         {
             using (var context = new AniketEntities())
             {
-                var emp = context.tblEmp.FirstOrDefault(x => x.Id == id);
-                if (emp != null)
-                {
-                    emp.FirstName = model.FirstName;
-                    emp.LastName= model.LastName;
-                    emp.Email= model.Email;
-                    emp.Code = model.Code;
-                }
+                var emp = new tblEmp();  //context.tblEmp.FirstOrDefault(x => x.Id == id);
+                emp.Id = model.Id;
+                emp.FirstName = model.FirstName;
+                emp.LastName = model.LastName;
+                emp.Email = model.Email;
+                emp.Code = model.Code;
+                emp.AddressId = model.AddressId;
+
+                context.Entry(emp).State = System.Data.Entity.EntityState.Modified; //most imp line
+
                 context.SaveChanges();
                 return true;
             };
+        }
+        public bool DeleteEmp(int id)
+        {
+            using (var context = new AniketEntities())
+            {
+                //For double hit database operation in delete method first get record then deleted
+                //var emp = context.tblEmp.FirstOrDefault(x => x.Id == id);
+                //if (emp != null)
+                //{
+                //    context.tblEmp.Remove(emp);
+                //    context.SaveChanges();
+                //    return true;
+                //}
+
+                //For single hit database operation in delete method 
+                var emp = new tblEmp()
+                {
+                    Id = id
+                };
+                context.Entry(emp).State = System.Data.Entity.EntityState.Deleted; //most imp line
+                context.SaveChanges();
+                return true;
+            }
         }
     }
 }
