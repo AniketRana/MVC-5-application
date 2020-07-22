@@ -35,7 +35,36 @@ namespace MVC_AppWithDB.Controllers
                 {
                     ModelState.Clear();
                     ViewBag.Issuccess = "Data Added";
+                    return RedirectToAction("GetAll");
                 }
+            }
+            return View();            
+        }
+
+        public ActionResult GetAll()
+        {
+            var result = repository.GetAllData();
+            return View(result);
+        }
+        public ActionResult Details(int id)
+        {
+            var result = repository.GetSingleData(id);
+            return View(result);
+        }
+
+        public ActionResult Edit(int id) 
+        {
+            var result = repository.GetSingleData(id);
+            return View(result);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(EmpModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                repository.UpdateEmp(model.Id, model);
+                return RedirectToAction("GetAll");
             }
             return View();
         }

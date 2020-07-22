@@ -9,17 +9,17 @@ namespace MyApp.Db.DbOperation
 {
     public class EmpRepository
     {
-        public int AddEmp(EmpModel model) 
+        public int AddEmp(EmpModel model)
         {
             using (var context = new AniketEntities())
             {
                 tblEmp emp = new tblEmp()
                 {
                     FirstName = model.FirstName,
-                    LastName= model.LastName,
-                    Email= model.Email,
+                    LastName = model.LastName,
+                    Email = model.Email,
                     Code = model.Code
-                    
+
                 };
                 if (model.Address != null)
                 {
@@ -27,8 +27,8 @@ namespace MyApp.Db.DbOperation
                     {
                         Details = model.Address.Details,
                         Country = model.Address.Country,
-                        State= model.Address.State,
-                        City= model.Address.City,
+                        State = model.Address.State,
+                        City = model.Address.City,
                     };
 
                 }
@@ -36,6 +36,75 @@ namespace MyApp.Db.DbOperation
                 context.SaveChanges();
                 return emp.Id;
             }
+        }
+
+        public List<EmpModel> GetAllData()
+        {
+            using (var context = new AniketEntities())
+            {
+                var result = context.tblEmp
+                    .Select(x => new EmpModel()
+                    {
+                        Id = x.Id,
+                        AddressId = x.AddressId,
+                        Code = x.Code,
+                        Email = x.Email,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Address = new AddressModel()
+                        {
+                            Id = x.tblAddress.Id,
+                            Details = x.tblAddress.Details,
+                            Country = x.tblAddress.Country,
+                            State = x.tblAddress.State,
+                            City = x.tblAddress.City,
+                        }
+                    }).ToList();
+                return result;
+            }
+        }
+        public EmpModel GetSingleData(int id)
+        {
+            using (var context = new AniketEntities())
+            {
+                var result = context.tblEmp
+                    .Where(x => x.Id == id)
+                    .Select(x => new EmpModel()
+                    {
+                        Id = x.Id,
+                        AddressId = x.AddressId,
+                        Code = x.Code,
+                        Email = x.Email,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                        Address = new AddressModel()
+                        {
+                            Id = x.tblAddress.Id,
+                            Details = x.tblAddress.Details,
+                            Country = x.tblAddress.Country,
+                            State = x.tblAddress.State,
+                            City = x.tblAddress.City,
+                        }
+                    }).FirstOrDefault();
+                return result;
+            }
+        }
+
+        public bool UpdateEmp(int id, EmpModel model)
+        {
+            using (var context = new AniketEntities())
+            {
+                var emp = context.tblEmp.FirstOrDefault(x => x.Id == id);
+                if (emp != null)
+                {
+                    emp.FirstName = model.FirstName;
+                    emp.LastName= model.LastName;
+                    emp.Email= model.Email;
+                    emp.Code = model.Code;
+                }
+                context.SaveChanges();
+                return true;
+            };
         }
     }
 }

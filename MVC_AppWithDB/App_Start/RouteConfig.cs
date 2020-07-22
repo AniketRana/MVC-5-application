@@ -16,7 +16,7 @@ namespace MVC_AppWithDB
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "create", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "GetAll", id = UrlParameter.Optional }
             );
         }
     }
