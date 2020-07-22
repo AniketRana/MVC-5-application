@@ -9,7 +9,7 @@ namespace MyApp.Db.DbOperation
 {
     public class EmpRepository
     {
-        public int AddEmp(EmpModel model)
+        public int AddEmp(EmpModel model) 
         {
             using (var context = new AniketEntities())
             {
